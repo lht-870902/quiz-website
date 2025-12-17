@@ -2,8 +2,8 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>測驗題網站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>發票判斷測驗</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -11,7 +11,7 @@
       padding: 20px;
     }
     .quiz-box {
-      max-width: 700px;
+      max-width: 720px;
       margin: auto;
       background: #fff;
       padding: 24px;
@@ -20,14 +20,15 @@
     }
     img {
       max-width: 100%;
-      border-radius: 8px;
       margin: 12px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
     }
     .option {
-      padding: 10px 14px;
-      margin: 8px 0;
       border: 1px solid #ddd;
+      padding: 10px 14px;
       border-radius: 8px;
+      margin: 8px 0;
       cursor: pointer;
     }
     .option:hover { background: #f0f4ff; }
@@ -40,9 +41,9 @@
 
 <div class="quiz-box">
   <h2 id="question"></h2>
-  <img id="questionImage" style="display:none" />
+  <img id="questionImage"/>
   <div id="options"></div>
-  <div class="result" id="result"></div>
+  <div id="result"></div>
 </div>
 
 <script>
@@ -52,11 +53,6 @@ const quizData = [
     image: "images/q1.png",
     options: ["境內發票", "境外發票"],
     answer: 1
-  },
-  {
-    question: "需要計算境外稅嗎？",
-    options: ["要算", "不用算"],
-    answer: 0
   }
 ];
 
@@ -66,15 +62,8 @@ let locked = false;
 function loadQuestion() {
   locked = false;
   const q = quizData[current];
-  document.getElementById("question").innerText = `Q${current + 1}. ${q.question}`;
-
-  const img = document.getElementById("questionImage");
-  if (q.image) {
-    img.src = q.image;
-    img.style.display = "block";
-  } else {
-    img.style.display = "none";
-  }
+  document.getElementById("question").innerText = q.question;
+  document.getElementById("questionImage").src = q.image;
 
   const optionsBox = document.getElementById("options");
   optionsBox.innerHTML = "";
@@ -91,26 +80,17 @@ function loadQuestion() {
 
 function selectAnswer(el, idx) {
   if (locked) return;
+  locked = true;
 
   const q = quizData[current];
   const options = document.querySelectorAll(".option");
+  options[q.answer].classList.add("correct");
 
   if (idx === q.answer) {
-    locked = true;
-    options[q.answer].classList.add("correct");
-    document.getElementById("result").innerText = "✅ Correct，前往下一題";
-
-    setTimeout(() => {
-      current++;
-      if (current >= quizData.length) {
-        alert("🎉 測驗完成！");
-        current = 0;
-      }
-      loadQuestion();
-    }, 800);
+    document.getElementById("result").innerText = "✅ Correct";
   } else {
     el.classList.add("wrong");
-    document.getElementById("result").innerText = "❌ Incorrect，請再試一次";
+    document.getElementById("result").innerText = "❌ Incorrect";
   }
 }
 
@@ -119,4 +99,5 @@ loadQuestion();
 
 </body>
 </html>
+
 
