@@ -18,14 +18,12 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    h2 { margin-bottom: 12px; }
     img {
       max-width: 100%;
       border-radius: 8px;
       margin: 12px 0;
     }
     .option {
-      display: block;
       padding: 10px 14px;
       margin: 8px 0;
       border: 1px solid #ddd;
@@ -33,18 +31,9 @@
       cursor: pointer;
     }
     .option:hover { background: #f0f4ff; }
-    .correct { background: #e6fffa; border-color: #2ecc71; }
-    .wrong { background: #fff0f0; border-color: #e74c3c; }
+    .correct { background: #e6fffa; border-color: #10b981; }
+    .wrong { background: #fff1f2; border-color: #ef4444; }
     .result { margin-top: 12px; font-weight: bold; }
-    button {
-      margin-top: 20px;
-      padding: 10px 18px;
-      border: none;
-      border-radius: 8px;
-      background: #4f46e5;
-      color: #fff;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -54,54 +43,53 @@
   <img id="questionImage" style="display:none" />
   <div id="options"></div>
   <div class="result" id="result"></div>
-  <button onclick="nextQuestion()">下一題</button>
 </div>
 
 <script>
-  const quizData = [
-    {
-      question: "以下為境內票還境外發票?？",
-      image: "images/q1.png",
-      options: ["境內發票", "境外發票"],
-      answer: 2
-    },
-    {
-      question: "需要算境外稅嗎？",
-      options: ["要算", "不用算"],
-      answer: 1
-    }
-  ];
+const quizData = [
+  {
+    question: "以下為境內發票還是境外發票？",
+    image: "images/q1.png",
+    options: ["境內發票", "境外發票"],
+    answer: 1
+  },
+  {
+    question: "需要計算境外稅嗎？",
+    options: ["要算", "不用算"],
+    answer: 0
+  }
+];
 
-  let current = 0;
-  let locked = false;
+let current = 0;
+let locked = false;
 
-  function loadQuestion() {
-    locked = false;
-    const q = quizData[current];
-    document.getElementById('question').innerText = `Q${current + 1}. ${q.question}`;
+function loadQuestion() {
+  locked = false;
+  const q = quizData[current];
+  document.getElementById("question").innerText = `Q${current + 1}. ${q.question}`;
 
-    const img = document.getElementById('questionImage');
-    if (q.image) {
-      img.src = q.image;
-      img.style.display = 'block';
-    } else {
-      img.style.display = 'none';
-    }
-
-    const optionsBox = document.getElementById('options');
-    optionsBox.innerHTML = '';
-    document.getElementById('result').innerText = '';
-
-    q.options.forEach((opt, idx) => {
-      const div = document.createElement('div');
-      div.className = 'option';
-      div.innerText = opt;
-      div.onclick = () => selectAnswer(div, idx);
-      optionsBox.appendChild(div);
-    });
+  const img = document.getElementById("questionImage");
+  if (q.image) {
+    img.src = q.image;
+    img.style.display = "block";
+  } else {
+    img.style.display = "none";
   }
 
-  function selectAnswer(el, idx) {
+  const optionsBox = document.getElementById("options");
+  optionsBox.innerHTML = "";
+  document.getElementById("result").innerText = "";
+
+  q.options.forEach((opt, idx) => {
+    const div = document.createElement("div");
+    div.className = "option";
+    div.innerText = opt;
+    div.onclick = () => selectAnswer(div, idx);
+    optionsBox.appendChild(div);
+  });
+}
+
+function selectAnswer(el, idx) {
   if (locked) return;
 
   const q = quizData[current];
@@ -120,27 +108,15 @@
       }
       loadQuestion();
     }, 800);
-
   } else {
     el.classList.add("wrong");
     document.getElementById("result").innerText = "❌ Incorrect，請再試一次";
   }
-} else {
-      document.getElementById('result').innerText = '✅ Correct';
-    }
-  }
+}
 
-  function nextQuestion() {
-    current++;
-    if (current >= quizData.length) {
-      alert('測驗完成！');
-      current = 0;
-    }
-    loadQuestion();
-  }
-
-  loadQuestion();
+loadQuestion();
 </script>
 
 </body>
 </html>
+
